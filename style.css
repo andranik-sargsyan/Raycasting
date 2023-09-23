@@ -1,0 +1,8 @@
+﻿canvas {
+    border: solid 1px black;
+    margin: 100px auto;
+}
+
+.canvas-wrapper {
+    display: flex;
+}
