@@ -31,13 +31,12 @@
 
             if (points.length) {
                 let closestPoint = points[0];
-                let closestDistance = Math.sqrt((ray.x1 - points[0].x) ** 2 + (ray.y1 - points[0].y) ** 2);
+                let closestPointDistance = Math.sqrt((ray.x1 - points[0].x) ** 2 + (ray.y1 - points[0].y) ** 2);
                 for (let i = 1; i < points.length; i++) {
-                    let point = points[i];
-                    let pointDistance = Math.sqrt((ray.x1 - points[i].x) ** 2 + (ray.y1 - points[i].y) ** 2);
-                    if (pointDistance < closestDistance) {
-                        closestDistance = pointDistance;
-                        closestPoint = point;
+                    let distance = Math.sqrt((ray.x1 - points[i].x) ** 2 + (ray.y1 - points[i].y) ** 2);
+                    if (distance < closestPointDistance) {
+                        closestPoint = points[i];
+                        closestPointDistance = distance;
                     }
                 }
                 ray.x2 = closestPoint.x;
