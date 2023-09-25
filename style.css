@@ -1,8 +1,21 @@
 ﻿canvas {
     border: solid 1px black;
     margin: 100px auto;
+
 }
 
 .canvas-wrapper {
     display: flex;
+}
+
+#canvas-3d {
+    background-image: url(sky.jpg), url(ground.jpg);
+    background-repeat: repeat-x, repeat;
+    background-position-x: 0px, 0px;
+}
+
+#gun {
+    width: 100px;
+    height: 100px;
+    position: absolute;
 }
