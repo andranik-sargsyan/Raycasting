@@ -4,7 +4,7 @@
         this.y = y;
         this.angle = angle;
         this.rays = [];
-        this.speed = 10;
+        this.speed = 5;
         this.fov = 90;
         this.angleStep = 0.5;
         for (let i = -this.fov / this.angleStep / 2; i <= this.fov / this.angleStep / 2; i++) {
@@ -55,49 +55,34 @@
             ray.y1 = this.y;
             ray.angle = this.angle + i * this.angleStep * Math.PI / 180;
 
-            let points = obstacles.map(o => Player.collide(ray, o)).filter(p => p);
+            const closestPoint = Utilities.closestPoint(ray, obstacles);
 
-            if (points.length) {
-                let closestPoint = points[0];
-                let closestPointDistance = Math.sqrt((ray.x1 - points[0].x) ** 2 + (ray.y1 - points[0].y) ** 2);
-                for (let i = 1; i < points.length; i++) {
-                    let distance = Math.sqrt((ray.x1 - points[i].x) ** 2 + (ray.y1 - points[i].y) ** 2);
-                    if (distance < closestPointDistance) {
-                        closestPoint = points[i];
-                        closestPointDistance = distance;
-                    }
-                }
-                ray.x2 = closestPoint.x;
-                ray.y2 = closestPoint.y;
-            }
-            else {
-                ray.x2 = undefined;
-                ray.y2 = undefined;
-            }
+            ray.x2 = closestPoint ? closestPoint.point.x : undefined;
+            ray.y2 = closestPoint ? closestPoint.point.y : undefined;
         }
     }
 
-    static collide(ray, obstacle) {
-        let x1 = obstacle.x1;
-        let y1 = obstacle.y1;
-        let x2 = obstacle.x2;
-        let y2 = obstacle.y2;
-        let x3 = ray.x1;
-        let y3 = ray.y1;
-        let x4 = ray.x1 + Math.cos(ray.angle);
-        let y4 = ray.y1 - Math.sin(ray.angle);
+    move(straight, sign, angle, funcX, funcY) {
+        let rayAngle = this.angle + (straight ? 0 : Math.PI / 2);
 
-        let denominator = ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4));
-        let t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denominator;
-        let u = ((x1 - x3) * (y1 - y2) - (y1 - y3) * (x1 - x2)) / denominator;
+        const ray1 = {
+            x1: this.x,
+            y1: this.y,
+            angle: rayAngle
+        };
 
-        if (t >= 0 && t <= 1 && u >= 0) {
-            return {
-                x: x1 + t * (x2 - x1),
-                y: y1 + t * (y2 - y1)
-            };
+        const ray2 = {
+            x1: this.x + sign * 2 * this.speed * funcX(angle),
+            y1: this.y - sign * 2 * this.speed * funcY(angle),
+            angle: rayAngle
+        };
+
+        const oldPoint = Utilities.closestPoint(ray1, obstacles);
+        const newPoint = Utilities.closestPoint(ray2, obstacles);
+
+        if (oldPoint && newPoint && oldPoint.obstacle == newPoint.obstacle) {
+            this.x = this.x + sign * this.speed * funcX(angle);
+            this.y = this.y - sign * this.speed * funcY(angle);
         }
-
-        return undefined;
     }
 }

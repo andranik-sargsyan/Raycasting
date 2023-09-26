@@ -37,6 +37,36 @@ const obstacles = [
 player.updateRays();
 
 function update() {
+    if (!player.movingKey) {
+        return;
+    }
+
+    switch (player.movingKey) {
+        case "w":
+            player.move(true, 1, player.angle, Math.cos, Math.sin);
+            break;
+        case "s":
+            player.move(true, -1, player.angle, Math.cos, Math.sin);
+            break;
+        case "q":
+            player.move(false, -1, Math.PI - player.angle, Math.sin, Math.cos);
+            break;
+        case "e":
+            player.move(false, 1, Math.PI - player.angle, Math.sin, Math.cos);
+            break;
+        case "a":
+            player.angle += Math.PI / 128;
+            canvas3D.style.backgroundPositionX = `${player.angle * 720}px`;
+            break;
+        case "d":
+            player.angle -= Math.PI / 128;
+            canvas3D.style.backgroundPositionX = `${player.angle * 720}px`;
+            break;
+        default:
+            break;
+    }
+
+    player.updateRays();
 }
 
 function draw() {
@@ -72,37 +102,35 @@ canvas.addEventListener("wheel", e => {
 document.addEventListener("keydown", e => {
     switch (e.key) {
         case "w":
-            player.x += player.speed * Math.cos(player.angle);
-            player.y -= player.speed * Math.sin(player.angle);
-            break;
         case "s":
-            player.x -= player.speed * Math.cos(player.angle);
-            player.y += player.speed * Math.sin(player.angle);
-            break;
-        case "a":
-            player.angle += Math.PI / 64;
-            canvas3D.style.backgroundPositionX = `${player.angle * 720}px`;
-            break;
-        case "d":
-            player.angle -= Math.PI / 64;
-            canvas3D.style.backgroundPositionX = `${player.angle * 720}px`;
-            break;
         case "q":
-            player.x -= player.speed * Math.sin(Math.PI - player.angle);
-            player.y += player.speed * Math.cos(Math.PI - player.angle);
-            break;
         case "e":
-            player.x += player.speed * Math.sin(Math.PI - player.angle);
-            player.y -= player.speed * Math.cos(Math.PI - player.angle);
+        case "a":
+        case "d":
+            player.movingKey = e.key;
             break;
         case " ":
-            gun.src = "gun-shot.gif";
+            gun.src = "images/gun-shot.gif";
             setTimeout(() => {
-                gun.src = "gun.png";
+                gun.src = "images/gun.png";
             }, 750);
             break;
         default:
             break;
     }
-    player.updateRays();
+});
+
+document.addEventListener("keyup", e => {
+    switch (e.key) {
+        case "w":
+        case "s":
+        case "q":
+        case "e":
+        case "a":
+        case "d":
+            player.movingKey = undefined;
+            break;
+        default:
+            break;
+    }
 });

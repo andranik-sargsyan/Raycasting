@@ -12,7 +12,7 @@
             return Infinity;
         }
 
-        return Math.sqrt((this.x1 - this.x2) ** 2 + (this.y1 - this.y2) ** 2);
+        return Utilities.distance(this.x1, this.y1, this.x2, this.y2);
     }
 
     draw() {
