@@ -95,6 +95,12 @@ document.addEventListener("keydown", e => {
             player.x += player.speed * Math.sin(Math.PI - player.angle);
             player.y -= player.speed * Math.cos(Math.PI - player.angle);
             break;
+        case " ":
+            gun.src = "gun-shot.gif";
+            setTimeout(() => {
+                gun.src = "gun.png";
+            }, 750);
+            break;
         default:
             break;
     }

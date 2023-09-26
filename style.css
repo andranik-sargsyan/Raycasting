@@ -10,12 +10,13 @@
 
 #canvas-3d {
     background-image: url(sky.jpg), url(ground.jpg);
-    background-repeat: repeat-x, repeat;
+    background-repeat: repeat-x, repeat-x;
     background-position-x: 0px, 0px;
+    background-position-y: 0px, 300px;
 }
 
 #gun {
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     position: absolute;
 }
